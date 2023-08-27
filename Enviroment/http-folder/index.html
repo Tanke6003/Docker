@@ -7,25 +7,56 @@
 </head>
 <body>
     <h1>Este es un docker</h1>
-    <span>respuesta desde api: <p id="res"></p> </span>
+    <div>
+        <label for="message">Mensaje:</label>
+        <input type="text" id="message" />
+        <button onclick="guardarMensaje()">Guardar Mensaje</button>
+    </div>
+    <div>
+        <button onclick="obtenerUltimoMensaje()">Obtener Último Mensaje</button>
+        <p>Último mensaje: <span id="ultimoMensaje"></span></p>
+    </div>
+
 </body>
 <script>
-    const p = document.getElementById('res')
-    fetch('http://localhost:8000/my-first-api')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    const ultimoMensaje = document.getElementById('ultimoMensaje');
+    function mostrarError(message) {
+        alert(message);
     }
-    return response.json();
-  })
-  .then(data => {
-    // Aquí puedes trabajar con los datos obtenidos
-    p.innerHTML = data
-    console.log(data);
-  })
-  .catch(error => {
-    p.innerHTML = error
-    console.error('There was a problem with the fetch operation:', error);
-  });
+
+    function guardarMensaje() {
+        const message = document.getElementById('message').value;
+        fetch('http://localhost:8000/saveMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Mensaje Guardado!!")
+            console.log(data);
+        })
+        .catch(error => {
+            mostrarError('Error al guardar el mensaje');
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
+    function obtenerUltimoMensaje() {
+        fetch('http://localhost:8000/getLastMessage')
+        .then(response => response.json())
+        .then(data => {
+            ultimoMensaje.textContent = data.last_message;
+            console.log(data);
+        })
+        .catch(error => {
+            mostrarError('Error al obtener el último mensaje');
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
 </script>
 </html>
