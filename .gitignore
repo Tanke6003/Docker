@@ -1,0 +1,3 @@
+mariadb-prd-data/*
+mariadb-stg-data/*
+!mariadb-prd-data/Test
