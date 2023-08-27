@@ -1,0 +1,44 @@
+version: '3'
+services:
+  
+  dbstg:
+    container_name: ${MARIADB_SERVER_STG}
+    image: mariadb:jammy
+    restart: always
+    volumes:
+      - ./mariadb-stg-data:/var/lib/mysql
+    environment:
+      MYSQL_USER: ${USERNAME_MARIADB_STG}
+      MYSQL_PASSWORD: ${PASSWORD_MARIADB_STG}
+      MYSQL_ROOT_PASSWORD: ${PASSWORD_ROOT_MARIADB_STG}
+
+  dbprd:
+    container_name: ${MARIADB_SERVER_PRD}
+    image: mariadb:jammy
+    restart: always
+    volumes:
+      - ./mariadb-prd-data:/var/lib/mysql
+    environment:
+      MYSQL_USER: ${USERNAME_MARIADB_PRD}
+      MYSQL_PASSWORD: ${PASSWORD_MARIADB_PRD}
+      MYSQL_ROOT_PASSWORD: ${PASSWORD_ROOT_MARIADB_PRD}
+
+  phpmyadmin:
+    container_name: ${PHPMYADMIN_CONTAINER_NAME}
+    depends_on:
+      - dbstg
+      - dbprd
+    image: phpmyadmin:5.2.0-apache
+    restart: always
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    environment:
+      PMA_ARBITRARY: 1
+    volumes:
+      - ./phpmyadmin:/sessions
+volumes:
+  #genera volumnes fisicos cuando no existen si pones external true los ba a buscar y si no los encuentra
+  #no arranca 
+  mariadb-stg-data:
+  mariadb-prd-data:
+  phpmyadmin:
