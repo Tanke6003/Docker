@@ -1,4 +1,0 @@
-mariadb-prd-data/*
-mariadb-stg-data/*
-python-folder/__pycache__
-!mariadb-prd-data/Test

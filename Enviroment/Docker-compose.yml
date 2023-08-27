@@ -11,6 +11,17 @@ services:
       MYSQL_USER: ${USERNAME_MARIADB_STG}
       MYSQL_PASSWORD: ${PASSWORD_MARIADB_STG}
       MYSQL_ROOT_PASSWORD: ${PASSWORD_ROOT_MARIADB_STG}
+    command: >
+      bash -c "
+        /entrypoint.sh mysqld & sleep 10s
+        && mysql -u root -p${PASSWORD_ROOT_MARIADB_STG} -e '
+          CREATE DATABASE IF NOT EXISTS Test;
+          USE Test;
+          CREATE TABLE IF NOT EXISTS sys_Message (
+            PKMessage INT AUTO_INCREMENT PRIMARY KEY,
+            message_text VARCHAR(50) NOT NULL
+          );'
+        && wait"
 
   dbprd:
     container_name: ${MARIADB_SERVER_PRD}
@@ -34,20 +45,20 @@ services:
       - "${PHPMYADMIN_PORT}:80"
     environment:
       - PMA_ARBITRARY=1
-  http:
-    container_name: http_container
+  httpd:
+    container_name: ${HTTPD_CONTAINER_NAME}
     image: httpd:alpine3.18
     restart: always
     ports:
-      - "8080:80"
+      - "${HTTPD_PORT}:80"
     volumes:
       - ./http-folder:/usr/local/apache2/htdocs
   python:
-    container_name: python_container
+    container_name: ${PYTHON_CONTAINER_NAME}
     image: python:alpine3.17
     restart: always
     ports:
-      - "8000:8000"
+      - "${PYTHON_PORT}:8000"
     volumes:
       - ./python-folder:/usr/src/myapp
     working_dir: /usr/src/myapp

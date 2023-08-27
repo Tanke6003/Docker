@@ -1,0 +1,14 @@
+############### Enviroment ##################
+
+# Ignorar contenido de mariadb-prd-data y mariadb-stg-data
+Enviroment/mariadb-prd-data/*
+Enviroment/mariadb-stg-data/*
+
+# Mantener la carpeta Test en ambas carpetas
+!Enviroment/mariadb-prd-data/Test
+!Enviroment/mariadb-stg-data/Test
+
+# Ignorar La carpeta __pycache__  dentro de python-folder
+Enviroment/python-folder/__pycache__
+
+#############################################
