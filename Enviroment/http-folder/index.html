@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruben Farias</title>
+</head>
+<body>
+    <h1>Este es un docker</h1>
+    <span>respuesta desde api: <p id="res"></p> </span>
+</body>
+<script>
+    const p = document.getElementById('res')
+    fetch('http://localhost:8000/my-first-api')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Aquí puedes trabajar con los datos obtenidos
+    p.innerHTML = data
+    console.log(data);
+  })
+  .catch(error => {
+    p.innerHTML = error
+    console.error('There was a problem with the fetch operation:', error);
+  });
+</script>
+</html>

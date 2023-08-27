@@ -28,17 +28,38 @@ services:
     depends_on:
       - dbstg
       - dbprd
-    image: phpmyadmin:5.2.0-apache
+    image: phpmyadmin:5.2.1-apache
     restart: always
     ports:
       - "${PHPMYADMIN_PORT}:80"
     environment:
-      PMA_ARBITRARY: 1
+      - PMA_ARBITRARY=1
+  http:
+    container_name: http_container
+    image: httpd:alpine3.18
+    restart: always
+    ports:
+      - "8080:80"
     volumes:
-      - ./phpmyadmin:/sessions
+      - ./http-folder:/usr/local/apache2/htdocs
+  python:
+    container_name: python_container
+    image: python:alpine3.17
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./python-folder:/usr/src/myapp
+    working_dir: /usr/src/myapp
+    command: sh -c "python3 -m venv /appenv &&
+     source /appenv/bin/activate &&
+      pip install fastapi uvicorn &&
+      pip install mysql-connector-python &&
+       uvicorn app:app --host 0.0.0.0 --port 8000"
 volumes:
   #genera volumnes fisicos cuando no existen si pones external true los ba a buscar y si no los encuentra
   #no arranca 
   mariadb-stg-data:
   mariadb-prd-data:
-  phpmyadmin:
+  http-folder:
+  python-folder:
