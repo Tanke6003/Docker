@@ -11,17 +11,17 @@ services:
       MYSQL_USER: ${USERNAME_MARIADB_STG}
       MYSQL_PASSWORD: ${PASSWORD_MARIADB_STG}
       MYSQL_ROOT_PASSWORD: ${PASSWORD_ROOT_MARIADB_STG}
-    command: >
-      bash -c "
-        /entrypoint.sh mysqld & sleep 10s
-        && mysql -u root -p${PASSWORD_ROOT_MARIADB_STG} -e '
-          CREATE DATABASE IF NOT EXISTS Test;
-          USE Test;
-          CREATE TABLE IF NOT EXISTS sys_Message (
-            PKMessage INT AUTO_INCREMENT PRIMARY KEY,
-            message_text VARCHAR(50) NOT NULL
-          );'
-        && wait"
+    # command: >
+    #   bash -c "
+    #     sleep 60s && # Espera 10 segundos para asegurarse de que el servidor MySQL esté en funcionamiento
+    #     mariadb -u root -p ${PASSWORD_ROOT_MARIADB_STG} -e '
+    #       CREATE DATABASE IF NOT EXISTS Test;
+    #       USE Test;
+    #       CREATE TABLE IF NOT EXISTS sys_Message (
+    #         PKMessage INT AUTO_INCREMENT PRIMARY KEY,
+    #         message_text VARCHAR(50) NOT NULL
+    #       );'
+    #   "
 
   dbprd:
     container_name: ${MARIADB_SERVER_PRD}
