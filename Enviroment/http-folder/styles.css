@@ -64,11 +64,22 @@ h1 {
 .card a:hover {
     text-decoration: underline;
 }
-
 /* Pie de página */
 footer {
     background-color: #007BFF;
     color: #fff;
     padding: 10px 0;
     text-align: center;
+    position: fixed; /* Establece la posición como fija */
+    bottom: 0; /* Ancla el footer en la parte inferior */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+}
+/* Estilo para las imágenes en las tarjetas */
+.card img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
